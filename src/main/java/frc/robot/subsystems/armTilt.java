@@ -18,6 +18,7 @@ public class armTilt {
 
         m_motor.restoreFactoryDefaults();
 
+        // geting the pid controller
         m_pidController = m_motor.getPIDController();
 
         m_encoder = m_motor.getEncoder();
