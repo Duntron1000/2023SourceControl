@@ -54,7 +54,6 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Joystick Y: ", oi.getJoystickY());
 
     //Adds current extension ammount and angle of the arm
-    SmartDashboard.putNumber("Arm Angle: ", armyBoy.getTiltEncoder());
     SmartDashboard.putNumber("Extension Ammount: ", armyBoy.getExtendEncoder());
 
     //Encoder values
@@ -225,21 +224,7 @@ public class Robot extends TimedRobot {
     //if (!failSafeEnable && armyBoy.getTiltEncoder() > 4) failSafeEnable = true;
     //if (armyBoy.getTiltEncoder() < 3.1 && failSafeEnable) cutPID = true;
 
-    //Steps setpoint for tilt to the target location
-    if (!done) {
-      if(tiltsetpoint < targetSetpoint) {
-        tiltsetpoint += 0.2;
-      }
-      else if(tiltsetpoint > targetSetpoint) {
-        tiltsetpoint -= 0.08;
-      }
-    }
-    if (targetSetpoint - .4 < armyBoy.getTiltEncoder() && armyBoy.getTiltEncoder() < targetSetpoint + .4) {
-      done = true;
-    }
-
     //Updates pid for arm tilt and extend
-    if ((targetSetpoint != 0 || armyBoy.getExtendEncoder() > -0.2)) armyBoy.tilt(tiltsetpoint);
     if ((done || targetSetpoint == 0)) armyBoy.extend(extendsetpoint);
     
 
@@ -272,7 +257,6 @@ public class Robot extends TimedRobot {
       done = true;
       drive.resetEncoders();
       armyBoy.resetSus();
-      armyBoy.resetTilt();
       armyBoy.resetExtention();
       targetSetpoint = 0;
       tiltsetpoint = 0;
