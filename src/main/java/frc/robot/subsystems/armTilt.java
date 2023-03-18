@@ -48,7 +48,5 @@ public class armTilt {
     
         SmartDashboard.putNumber("SetPoint", rotations);
         SmartDashboard.putNumber("ProcessVariable", m_encoder.getPosition());
-
-        //testing stuff bitch
     }
 }

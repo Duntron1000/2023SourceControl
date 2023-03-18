@@ -27,6 +27,7 @@ public class Robot extends TimedRobot {
   //private balance ballet = new balance(); see balance class
   private grabber grab = new grabber();
   private arm armyBoy = new arm();
+  private armTilt tilt = new armTilt();
 
   //Important variables
   private double tiltsetpoint = 0;
@@ -177,6 +178,8 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     //Drives using flighstick values
     drive.drive(oi.getJoystickX(), -oi.getJoystickY());
+
+    tilt.updatePID();
 
     //Balances Robot
     //if (oi.getXboxButtonPress(8)) ballet.balanceRobot(armyBoy); balance is broken
