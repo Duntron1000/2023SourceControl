@@ -45,10 +45,10 @@ public class armTilt {
         SmartDashboard.putNumber("Feed Forward", kFF);
         SmartDashboard.putNumber("Max Output", kMaxOutput);
         SmartDashboard.putNumber("Min Output", kMinOutput);
-        SmartDashboard.putNumber("Set Rotations", 0);
+        //SmartDashboard.putNumber("Set Rotations", 0);
     }
 
-    public void updatePID(){
+    public void updatePID(double rotations){
         // read PID coefficients from SmartDashboard
         double p = SmartDashboard.getNumber("P Gain", 0);
         double i = SmartDashboard.getNumber("I Gain", 0);
@@ -57,7 +57,7 @@ public class armTilt {
         double ff = SmartDashboard.getNumber("Feed Forward", 0);
         double max = SmartDashboard.getNumber("Max Output", 0);
         double min = SmartDashboard.getNumber("Min Output", 0);
-        double rotations = SmartDashboard.getNumber("Set Rotations", 0);
+        //double rotations = SmartDashboard.getNumber("Set Rotations", 0);
 
         // if PID coefficients on SmartDashboard have changed, write new values to controller
         if((p != kP)) { m_pidController.setP(p); kP = p; }
@@ -66,11 +66,11 @@ public class armTilt {
         if((iz != kIz)) { m_pidController.setIZone(iz); kIz = iz; }
         if((ff != kFF)) { m_pidController.setFF(ff); kFF = ff; }
         if((max != kMaxOutput) || (min != kMinOutput)) { 
-        m_pidController.setOutputRange(min, max); 
-        kMinOutput = min; kMaxOutput = max; 
+            m_pidController.setOutputRange(min, max); 
+            kMinOutput = min; kMaxOutput = max; 
         }
 
-        
+
         m_pidController.setReference(rotations, CANSparkMax.ControlType.kPosition);
     
         SmartDashboard.putNumber("SetPoint", rotations);

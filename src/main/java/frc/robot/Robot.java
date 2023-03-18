@@ -178,7 +178,7 @@ public class Robot extends TimedRobot {
     //Drives using flighstick values
     drive.drive(oi.getJoystickX(), -oi.getJoystickY());
 
-    tilt.updatePID();
+    
 
     //Balances Robot
     //if (oi.getXboxButtonPress(8)) ballet.balanceRobot(armyBoy); balance is broken
@@ -195,31 +195,36 @@ public class Robot extends TimedRobot {
     if (oi.getPOV() == 90) extendsetpoint += 0.6;
     else if (oi.getPOV() == 270) extendsetpoint -= 0.6;
 
-    //Arm pid locations
-    if (oi.getXboxButtonPress(1)) { // low
-      done = false;
-      targetSetpoint = 13.4;
-      extendsetpoint = -64.02;
+    //Arm pid locations - must find all of the pid values
+    if (oi.getXboxButtonPress(1) && inSteak.equals("Cube")) { // cube low
+      tiltsetpoint = 1;
     }
-    else if(oi.getXboxButtonPress(2)) { //ground position
-      // done = false;
-      // targetSetpoint = 8.3;
-      // extendsetpoint = -280.65;
+    else if(oi.getXboxButtonPress(3) && inSteak.equals("Cube")) { //cube mid
+      tiltsetpoint = 2;
     }
-    else if(oi.getXboxButtonPress(3)) { // mid
-      done = false;
-      targetSetpoint = 23.57;
-      extendsetpoint = -10;
+    else if(oi.getXboxButtonPress(4) && inSteak.equals("Cube")) { //cube high
+      tiltsetpoint = 3;
     }
-      //extendsetpoint = -243.6;
-    else if(oi.getXboxButtonPress(4)) { // human player 
-      done = false;
-      //targetSetpoint = 28.7;
-      //26
-      targetSetpoint = 28.7;
-      extendsetpoint = 0;
+    else if(oi.getXboxButtonPress(1) && inSteak.equals("Cone")) { // cone low 
+      tiltsetpoint = 4;
+    } 
+    else if(oi.getXboxButtonPress(3) && inSteak.equals("Cone")) { // cone mid
+      tiltsetpoint = 5;
+    } 
+    else if(oi.getXboxButtonPress(4) && inSteak.equals("Cone")) { // cone high
+      tiltsetpoint = 6;
+    }
+    else if(oi.getXboxButtonPress(2)) { // human player
+      tiltsetpoint = 7;
     }
 
+    tilt.updatePID(tiltsetpoint);
+    // else if(oi.getXboxButtonPress(2)) { // ground both unused at the moment
+      
+    // }
+    // else if(oi.getXboxButtonPress(2)) { // home hopefully
+      
+    // }
     //Fail safe for pid
     //if (!failSafeEnable && armyBoy.getTiltEncoder() > 4) failSafeEnable = true;
     //if (armyBoy.getTiltEncoder() < 3.1 && failSafeEnable) cutPID = true;
