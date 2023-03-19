@@ -1,0 +1,5 @@
+✔ make sparkmax pid work @done (3/19/2023, 4:26:02 PM)
+☐ tune sparkmax pid for new Arm (must wait for new arm)
+☐ find setpoints for new arm (must wait for new arm)
+☐ add code for limit switches
+
