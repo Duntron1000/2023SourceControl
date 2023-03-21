@@ -23,7 +23,7 @@ public class Robot extends TimedRobot {
   //Objects
   public static DriveTrain drive = new DriveTrain();
   private OIHandler oi = new OIHandler();
-  private vision limelightboyo = new vision();
+  
   private balance ballet = new balance(); //see balance class
   private grabber grab = new grabber();
   public static arm armyBoy = new arm();
@@ -166,8 +166,6 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     grab.resetEncoders();
-    
-    limelightboyo.setPipeLine();
   }
 
   /** This function is called periodically during operator control. */
