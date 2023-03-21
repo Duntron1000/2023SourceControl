@@ -1,27 +1,28 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.arm;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.portMap;
 
-public class armTilt {
-    private static final int deviceID = 62;
+public class armExtend {
+    private static final int deviceID = portMap.CAN_extending;
     private CANSparkMax m_motor;
     private SparkMaxPIDController m_pidController;
-    private RelativeEncoder m_encoder;
+    public RelativeEncoder m_encoder;
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
 
-    public armTilt(){
+    public armExtend() {
         m_motor = new CANSparkMax(deviceID, MotorType.kBrushless);
 
         m_motor.restoreFactoryDefaults();
 
-        // geting the pid controller
         m_pidController = m_motor.getPIDController();
 
         m_encoder = m_motor.getEncoder();
+        m_encoder.setPosition(0);
 
         kP = 0.1; 
         kI = 0;
@@ -73,7 +74,7 @@ public class armTilt {
 
         m_pidController.setReference(rotations, CANSparkMax.ControlType.kPosition);
     
-        SmartDashboard.putNumber("SetPoint", rotations);
-        SmartDashboard.putNumber("ProcessVariable", m_encoder.getPosition());
+        SmartDashboard.putNumber("Extention SetPoint", rotations);
+        SmartDashboard.putNumber("Extention Encoder", m_encoder.getPosition());
     }
 }
