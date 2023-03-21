@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.Auton.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.arm.arm;
-import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cameraserver.CameraServer; 
 /*
 The VM is configured to automatically run this class, and to call the functions corresponding to
 each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -24,7 +24,7 @@ public class Robot extends TimedRobot {
   public static DriveTrain drive = new DriveTrain();
   private OIHandler oi = new OIHandler();
   private vision limelightboyo = new vision();
-  //private balance ballet = new balance(); see balance class
+  private balance ballet = new balance(); //see balance class
   private grabber grab = new grabber();
   public static arm armyBoy = new arm();
 
@@ -39,15 +39,20 @@ public class Robot extends TimedRobot {
   private double intakeSpeed = 0;
 
   //Auton choices
-  private static final String kDefaultAuto = "communityExit";
-  private static final String kCustomAuto1 = "oneCone";
-  private static final String kCustomAuto2 = "oneCube";
+  private static final String kDefaultAuto = "Nothing";
+  private static final String kCustomAuto1 = "communityExit";
+  private static final String kCustomAuto2 = "oneCone";
+  private static final String kCustomAuto3 = "oneCube";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   autonBase autoBoyo;
   
   //Puts all of the data we want onto the smartdashboard
   private void smartdashboards() {
+
+    //gyro
+    
+    
     //Adds Joysticks values
     SmartDashboard.putNumber("Joystick X: ", oi.getJoystickX());
     SmartDashboard.putNumber("Joystick Y: ", oi.getJoystickY());
@@ -83,7 +88,7 @@ public class Robot extends TimedRobot {
 
     //Robot's current angle
     //SmartDashboard.putNumber("Gyro: ", gyroRap((int)(Math.round(gBoy.getAngle()))));
-    //SmartDashboard.putNumber("Gyro: ", (int)(ballet.navX.getRoll())); was causing an error 
+    SmartDashboard.putNumber("Gyro: ", (int)(ballet.navX.getPitch())); //was causing an error 
   }
 
   /*
@@ -104,9 +109,10 @@ public class Robot extends TimedRobot {
 
     //smartdashboard
     //Adds auton options
-    m_chooser.setDefaultOption("Exit Community", kDefaultAuto);
-    m_chooser.addOption("One Cone", kCustomAuto1);
-    m_chooser.addOption("One Cone Exit", kCustomAuto2);
+    m_chooser.setDefaultOption("Nothing", kDefaultAuto);
+    m_chooser.addOption("Exit Community", kCustomAuto1);
+    m_chooser.addOption("One Cone", kCustomAuto2);
+    m_chooser.addOption("One Cone Exit", kCustomAuto3);
     SmartDashboard.putData("Auto choices", m_chooser);
 
     smartdashboards();
@@ -142,10 +148,9 @@ public class Robot extends TimedRobot {
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
-
-    if (m_autoSelected.equals(kCustomAuto1)) autoBoyo = new autonOneCone();
-    else if (m_autoSelected.equals(kCustomAuto2)) autoBoyo = new autonOneConeExit();
-    else autoBoyo = new autonBase();
+    if (m_autoSelected.equals(kCustomAuto1))autoBoyo = new autonBase();
+    else if (m_autoSelected.equals(kCustomAuto2)) autoBoyo = new autonOneCone();
+    else if (m_autoSelected.equals(kCustomAuto3)) autoBoyo = new autonOneConeExit();
 
   }
 
