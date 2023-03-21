@@ -42,7 +42,8 @@ public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Nothing";
   private static final String kCustomAuto1 = "communityExit";
   private static final String kCustomAuto2 = "oneCone";
-  private static final String kCustomAuto3 = "oneCube";
+  private static final String kCustomAuto3 = "oneCubeExit";
+  private static final String kCustomAuto4 = "engage";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   autonBase autoBoyo;
@@ -88,7 +89,7 @@ public class Robot extends TimedRobot {
 
     //Robot's current angle
     //SmartDashboard.putNumber("Gyro: ", gyroRap((int)(Math.round(gBoy.getAngle()))));
-    SmartDashboard.putNumber("Gyro: ", (int)(ballet.navX.getPitch())); //was causing an error 
+    SmartDashboard.putNumber("Gyro: ", (ballet.navX.getPitch())); //was causing an error 
   }
 
   /*
@@ -113,6 +114,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("Exit Community", kCustomAuto1);
     m_chooser.addOption("One Cone", kCustomAuto2);
     m_chooser.addOption("One Cone Exit", kCustomAuto3);
+    m_chooser.addOption("Engage", kCustomAuto4);
     SmartDashboard.putData("Auto choices", m_chooser);
 
     smartdashboards();
@@ -151,6 +153,7 @@ public class Robot extends TimedRobot {
     if (m_autoSelected.equals(kCustomAuto1))autoBoyo = new autonBase();
     else if (m_autoSelected.equals(kCustomAuto2)) autoBoyo = new autonOneCone();
     else if (m_autoSelected.equals(kCustomAuto3)) autoBoyo = new autonOneConeExit();
+    else if (m_autoSelected.equals(kCustomAuto4)) autoBoyo = new autonEngage();
 
   }
 
