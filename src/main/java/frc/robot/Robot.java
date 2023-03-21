@@ -8,9 +8,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import frc.robot.Auton.autonBase;
+import frc.robot.Auton.*;
 import frc.robot.subsystems.*;
-
+import frc.robot.subsystems.arm.arm;
 import edu.wpi.first.cameraserver.CameraServer;
 /*
 The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -26,8 +26,7 @@ public class Robot extends TimedRobot {
   private vision limelightboyo = new vision();
   //private balance ballet = new balance(); see balance class
   private grabber grab = new grabber();
-  private arm armyBoy = new arm();
-  private armTilt tilt = new armTilt();
+  public static arm armyBoy = new arm();
 
   //Important variables
   private double tiltsetpoint = 0;
@@ -54,7 +53,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Joystick Y: ", oi.getJoystickY());
 
     //Adds current extension ammount and angle of the arm
-    SmartDashboard.putNumber("Extension Ammount: ", armyBoy.getExtendEncoder());
+    //SmartDashboard.putNumber("Extension Ammount: ", armyBoy.getExtendEncoder());
 
     //Encoder values
     SmartDashboard.putNumber("Encoder Left: ", drive.getLeftEncoder());
@@ -107,7 +106,7 @@ public class Robot extends TimedRobot {
     //Adds auton options
     m_chooser.setDefaultOption("Exit Community", kDefaultAuto);
     m_chooser.addOption("One Cone", kCustomAuto1);
-    m_chooser.addOption("One Cube", kCustomAuto2);
+    m_chooser.addOption("One Cone Exit", kCustomAuto2);
     SmartDashboard.putData("Auto choices", m_chooser);
 
     smartdashboards();
@@ -144,29 +143,23 @@ public class Robot extends TimedRobot {
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
 
-    switch (m_autoSelected) {
-      case kCustomAuto2:
-        // Put custom auto code here
-        break;
-      case kCustomAuto1:
-        break;
-      case kDefaultAuto:
-      default:
-        autoBoyo = new autonBase();
-        break;
-    }
+    if (m_autoSelected.equals(kCustomAuto1)) autoBoyo = new autonOneCone();
+    else if (m_autoSelected.equals(kCustomAuto2)) autoBoyo = new autonOneConeExit();
+    else autoBoyo = new autonBase();
+
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
     autoBoyo.execute();
+    tiltsetpoint = armyBoy.getTiltEncoder();
+    extendsetpoint = armyBoy.getExtendEncoder();
   }
 
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    armyBoy.resetSus();
     grab.resetEncoders();
     
     limelightboyo.setPipeLine();
@@ -178,14 +171,8 @@ public class Robot extends TimedRobot {
     //Drives using flighstick values
     drive.drive(oi.getJoystickX(), -oi.getJoystickY());
 
-    
-
     //Balances Robot
     //if (oi.getXboxButtonPress(8)) ballet.balanceRobot(armyBoy); balance is broken
-
-    //turn limelight light on / off
-    //if (oi.getTrigger(2) > 0.05) limelightboyo.lightOn();
-    //else limelightboyo.lightOff();
 
     //Tilts the arm up & down manually
     if (oi.getPOV() == 0) tiltsetpoint += .3;
@@ -217,28 +204,15 @@ public class Robot extends TimedRobot {
     else if(oi.getXboxButtonPress(2)) { // human player
       tiltsetpoint = 7;
     }
+    armyBoy.updatePID(tiltsetpoint, extendsetpoint);
 
-    tilt.updatePID(tiltsetpoint);
     // else if(oi.getXboxButtonPress(2)) { // ground both unused at the moment
       
     // }
     // else if(oi.getXboxButtonPress(2)) { // home hopefully
       
     // }
-    //Fail safe for pid
-    //if (!failSafeEnable && armyBoy.getTiltEncoder() > 4) failSafeEnable = true;
-    //if (armyBoy.getTiltEncoder() < 3.1 && failSafeEnable) cutPID = true;
-
-    //Updates pid for arm tilt and extend
-    if ((done || targetSetpoint == 0)) armyBoy.extend(extendsetpoint);
-    
-
-    //Rotates lazy susan
-    //not in use
-    // if (oi.getPOV() == 90) armyBoy.rotate(-0.3);
-    // else if (oi.getPOV() == 270) armyBoy.rotate(0.3);
-    // else armyBoy.rotate(0);
-
+  
     //Controls intake
     if (oi.getXboxButtonPress(6) && oi.getXboxButtonPress(7)) intakeSpeed = .2;
     else if (oi.getXboxButtonPress(6)) intakeSpeed = .6;
@@ -253,20 +227,6 @@ public class Robot extends TimedRobot {
       buttonIsPress = true;
     }
     else if (!oi.getJoystickButtonPress(5)) buttonIsPress = false;
-
-    //Cuts the PID
-    //if (oi.getXboxButtonPress(7)) cutPID = true;
-
-    //Resets everything
-    if (oi.getXboxButtonPress(8)) {
-      done = true;
-      drive.resetEncoders();
-      armyBoy.resetSus();
-      armyBoy.resetExtention();
-      targetSetpoint = 0;
-      tiltsetpoint = 0;
-      extendsetpoint = 0;
-    }
   }
   
   /** This function is called once when the robot is disabled. */
