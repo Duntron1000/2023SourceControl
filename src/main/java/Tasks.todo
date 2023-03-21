@@ -1,5 +1,23 @@
-✔ make sparkmax pid work @done (3/19/2023, 4:26:02 PM)
-☐ tune sparkmax pid for new Arm (must wait for new arm)
-☐ find setpoints for new arm (must wait for new arm)
-☐ add code for limit switches
+Arm:
+    ✔ make sparkmax pid work @done (3/19/2023, 4:26:02 PM)
+    ☐ tune sparkmax pid for new Arm (must wait for new arm)
+    ☐ find setpoints for new arm (must wait for new arm)
+    ☐ add code for limit switches
 
+balance:
+    ✔ add navx @done (3/21/2023, 3:47:19 PM)
+    ✔ code navx @done (3/21/2023, 3:47:24 PM)
+    ☐ balance auto
+
+Autos:
+    ✔ one game object auto (cone or cube?) @done (3/21/2023, 8:08:01 AM)
+    ✔ one game object and leave @done (3/21/2023, 8:08:05 AM)
+    ✔ do nothing @done (3/20/2023, 8:33:25 AM)
+    ☐ start in the middle 
+         ☐ one game object
+         ☐ just leave over the charge station
+    
+
+    ☐ add a constants file
+
+    c7u9b7zihg65d8x
