@@ -4,8 +4,6 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.controller.PIDController;
 
-import frc.robot.Robot.*;
-
 public class balanceIdea {
     private AHRS navX;
 
