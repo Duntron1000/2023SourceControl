@@ -15,15 +15,19 @@ public class armExtend {
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
 
     public armExtend() {
+        //create motor object
         m_motor = new CANSparkMax(deviceID, MotorType.kBrushless);
 
+        //reset motor object
         m_motor.restoreFactoryDefaults();
 
         m_pidController = m_motor.getPIDController();
 
+        //create and reset encoder
         m_encoder = m_motor.getEncoder();
         m_encoder.setPosition(0);
 
+        //PID values -- to be removed
         kP = 0.1; 
         kI = 0;
         kD = 0; 
@@ -32,6 +36,7 @@ public class armExtend {
         kMaxOutput = 1; 
         kMinOutput = -1;
 
+        //set PID values
         m_pidController.setP(kP);
         m_pidController.setI(kI);
         m_pidController.setD(kD);
@@ -39,6 +44,7 @@ public class armExtend {
         m_pidController.setFF(kFF);
         m_pidController.setOutputRange(kMinOutput, kMaxOutput);
 
+        //put PID values into SmartDashboard -- will be removed after tuning
         SmartDashboard.putNumber("P Gain", kP);
         SmartDashboard.putNumber("I Gain", kI);
         SmartDashboard.putNumber("D Gain", kD);
@@ -46,11 +52,10 @@ public class armExtend {
         SmartDashboard.putNumber("Feed Forward", kFF);
         SmartDashboard.putNumber("Max Output", kMaxOutput);
         SmartDashboard.putNumber("Min Output", kMinOutput);
-        //SmartDashboard.putNumber("Set Rotations", 0);
     }
 
     public void updatePID(double rotations){
-        // read PID coefficients from SmartDashboard
+        // read PID coefficients from SmartDashboard -- will be removed after tuning
         double p = SmartDashboard.getNumber("P Gain", 0);
         double i = SmartDashboard.getNumber("I Gain", 0);
         double d = SmartDashboard.getNumber("D Gain", 0);
@@ -58,7 +63,6 @@ public class armExtend {
         double ff = SmartDashboard.getNumber("Feed Forward", 0);
         double max = SmartDashboard.getNumber("Max Output", 0);
         double min = SmartDashboard.getNumber("Min Output", 0);
-        //double rotations = SmartDashboard.getNumber("Set Rotations", 0);
 
         // if PID coefficients on SmartDashboard have changed, write new values to controller
         if((p != kP)) { m_pidController.setP(p); kP = p; }
@@ -72,8 +76,10 @@ public class armExtend {
         }
 
 
+        //runs the motor to the desired setpoint 
         m_pidController.setReference(rotations, CANSparkMax.ControlType.kPosition);
     
+        //display setpoint and accual position 
         SmartDashboard.putNumber("Extention SetPoint", rotations);
         SmartDashboard.putNumber("Extention Encoder", m_encoder.getPosition());
     }
