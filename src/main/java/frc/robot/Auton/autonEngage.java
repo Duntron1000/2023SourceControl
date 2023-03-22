@@ -9,7 +9,8 @@ public class autonEngage extends autonBase {
     public autonEngage() {
         Robot.drive.resetEncoders();
     }
-//frame: 39in, community distance 16 1/4 ft, 17 ft
+
+    //frame: 39in, community distance 16 1/4 ft, 17 ft
     public void execute() {
         if (Math.abs(Robot.drive.getLeftEncoder()) < 31.25) {
             Robot.drive.drive(0, -.4);
