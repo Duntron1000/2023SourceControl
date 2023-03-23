@@ -36,5 +36,7 @@ public class portMap {
     public static final double EXTEND_FF = 0;
 
 
+    //Test motor
+    public static final int CAN_TEST = 62;
 
 }
