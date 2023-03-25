@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.Auton.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.arm.arm;
+
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.cameraserver.CameraServer; 
 /*
 The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -24,7 +27,8 @@ public class Robot extends TimedRobot {
   public static DriveTrain drive = new DriveTrain();
   private OIHandler oi = new OIHandler();
   
-  private balance ballet = new balance(); //see balance class
+  //private balance ballet = new balance(); //see balance class
+  private final AHRS gyro = new AHRS();
   private grabber grab = new grabber();
   public static arm armyBoy = new arm();
 
@@ -89,7 +93,7 @@ public class Robot extends TimedRobot {
 
     //Robot's current angle
     //SmartDashboard.putNumber("Gyro: ", gyroRap((int)(Math.round(gBoy.getAngle()))));
-    SmartDashboard.putNumber("Gyro: ", (ballet.navX.getPitch())); //was causing an error 
+    SmartDashboard.putNumber("Gyro: ", (gyro.getPitch())); //was causing an error 
   }
 
   /*

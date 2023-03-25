@@ -13,7 +13,7 @@ public class armTilt {
     private SparkMaxPIDController m_pidController;
     public RelativeEncoder m_encoder;
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
-
+     
     public armTilt() {
         //create motor object
         m_motor = new CANSparkMax(deviceID, MotorType.kBrushless);
