@@ -24,19 +24,19 @@ project.
 public class Robot extends TimedRobot {
 
   //Objects
-  public static DriveTrain drive = new DriveTrain();
-  private OIHandler oi = new OIHandler();
+  public static final DriveTrain drive = new DriveTrain();
+  private final OIHandler oi = new OIHandler();
   
   //private balance ballet = new balance(); //see balance class
   private final AHRS gyro = new AHRS();
-  private grabber grab = new grabber();
-  public static arm armyBoy = new arm();
+  private final grabber grab = new grabber();
+  public static final arm armyBoy = new arm();
 
   //Important variables
-  private double tiltsetpoint = 0;
-  private double extendsetpoint = 0;
-  private boolean done = true;
-  private double targetSetpoint = 0;
+  private double targetTiltsetpoint = 0;
+  private double targetExtendsetpoint = 0;
+  private double tiltsetpoint;
+  private double extendsetpoint;
   private boolean buttonIsPress = false;
   //private boolean failSafeEnable = false;
   private String inSteak;
@@ -54,33 +54,22 @@ public class Robot extends TimedRobot {
   
   //Puts all of the data we want onto the smartdashboard
   private void smartdashboards() {
-
-    //gyro
-    
-    
     //Adds Joysticks values
     SmartDashboard.putNumber("Joystick X: ", oi.getJoystickX());
     SmartDashboard.putNumber("Joystick Y: ", oi.getJoystickY());
-
-    //Adds current extension ammount and angle of the arm
-    //SmartDashboard.putNumber("Extension Ammount: ", armyBoy.getExtendEncoder());
 
     //Encoder values
     SmartDashboard.putNumber("Encoder Left: ", drive.getLeftEncoder());
     SmartDashboard.putNumber("Encoder Right: ", drive.getRightEncoder());
 
-    //Arm angle to be moved to and if it is done moving
-    SmartDashboard.putNumber("Target Position: ", targetSetpoint);
-    SmartDashboard.putBoolean("Done Moving?: ", done);
-
     //Setpoints
-    SmartDashboard.putNumber("Arm Set Point: ", tiltsetpoint);
+    SmartDashboard.putNumber("Tilt Set Point: ", tiltsetpoint);
     SmartDashboard.putNumber("Extend Set Point: ", extendsetpoint);
+    SmartDashboard.putNumber("Tilt Encoder: ", armyBoy.getTiltEncoder());
+    SmartDashboard.putNumber("Extend Encoder: ", armyBoy.getExtendEncoder());
 
-    //Pneumatics pressure
-    //SmartDashboard.putNumber("Robot Pressure: ", grab.getPressure());
     //Intake state
-    if (grab.extended) inSteak = "Cube";
+    if (grab.cubeMode) inSteak = "Cube";
     else inSteak = "Cone";
 
     SmartDashboard.putString("Intake", inSteak);
@@ -91,20 +80,10 @@ public class Robot extends TimedRobot {
     else if (intakeSpeed == -.15) SmartDashboard.putString("Intake Direction: ", "In");
     else SmartDashboard.putString("Intake Direction: ", "Stopped");
 
-    //Robot's current angle
-    //SmartDashboard.putNumber("Gyro: ", gyroRap((int)(Math.round(gBoy.getAngle()))));
-    SmartDashboard.putNumber("Gyro: ", (gyro.getPitch())); //was causing an error 
+    //Robot's current pitch
+    SmartDashboard.putNumber("Gyro: ", (gyro.getPitch()));
   }
 
-  /*
-  //Returns current angle in the smartdashboard
-  private int gyroRap(int angle){
-    //If angle is less than zero it will loop back to a positive angle between 0-360
-    if (angle < 0) return 360-(int)(Math.abs(ballet.navX.getRoll())%360);
-    //Else display current gyro angle between 0-360
-    else return angle%360;
-  }
-  */
   /*
   This function is run when the robot is first started up and should be used for any
   initialization code.
@@ -152,7 +131,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
+    
     System.out.println("Auto selected: " + m_autoSelected);
     if (m_autoSelected.equals(kCustomAuto1))autoBoyo = new autonBase();
     else if (m_autoSelected.equals(kCustomAuto2)) autoBoyo = new autonOneCone();
@@ -181,39 +160,55 @@ public class Robot extends TimedRobot {
     //Drives using flighstick values
     drive.drive(oi.getJoystickX(), -oi.getJoystickY());
 
-    //Balances Robot
-    //if (oi.getXboxButtonPress(8)) ballet.balanceRobot(armyBoy); balance is broken
-
     //Tilts the arm up & down manually
-    if (oi.getPOV() == 0) tiltsetpoint += .3;
-    else if (oi.getPOV() == 180) tiltsetpoint -= .2;
+    if (oi.getPOV() == 0) targetTiltsetpoint -= .4;
+    else if (oi.getPOV() == 180) targetTiltsetpoint += .3;
 
     //Extends arm in & out manually
-    if (oi.getPOV() == 90) extendsetpoint += 0.6;
-    else if (oi.getPOV() == 270) extendsetpoint -= 0.6;
+    if (oi.getPOV() == 90) targetExtendsetpoint += 0.6;
+    else if (oi.getPOV() == 270) targetExtendsetpoint -= 0.6;
 
     //Arm pid locations - must find all of the pid values
     if (oi.getXboxButtonPress(1) && inSteak.equals("Cube")) { // cube low
-      tiltsetpoint = 1;
+      targetTiltsetpoint = -10.2;
+      targetExtendsetpoint = 0;
     }
     else if(oi.getXboxButtonPress(3) && inSteak.equals("Cube")) { //cube mid
-      tiltsetpoint = 2;
+      targetTiltsetpoint = -53.6;
+      targetExtendsetpoint = 0;
     }
     else if(oi.getXboxButtonPress(4) && inSteak.equals("Cube")) { //cube high
-      tiltsetpoint = 3;
+      targetTiltsetpoint = -76;
+      targetExtendsetpoint = 0;
     }
     else if(oi.getXboxButtonPress(1) && inSteak.equals("Cone")) { // cone low 
-      tiltsetpoint = 4;
+      targetTiltsetpoint = -1;
+      targetExtendsetpoint = 0;
     } 
     else if(oi.getXboxButtonPress(3) && inSteak.equals("Cone")) { // cone mid
-      tiltsetpoint = 5;
+      targetTiltsetpoint = -72.4;
+      targetExtendsetpoint = -419.4;
     } 
-    else if(oi.getXboxButtonPress(4) && inSteak.equals("Cone")) { // cone high
-      tiltsetpoint = 6;
-    }
+    // else if(oi.getXboxButtonPress(4) && inSteak.equals("Cone")) { // cone high
+    //   //tiltsetpoint = 6;
+    // }
     else if(oi.getXboxButtonPress(2)) { // human player
-      tiltsetpoint = 7;
+      targetTiltsetpoint = -72.4;
+      targetExtendsetpoint = -1;
     }
+
+    if (targetTiltsetpoint < tiltsetpoint) {
+      tiltsetpoint = targetTiltsetpoint;
+
+      if (Math.abs(targetTiltsetpoint - armyBoy.getTiltEncoder()) < 1) extendsetpoint = targetExtendsetpoint;
+    }
+
+    else {
+      extendsetpoint = targetExtendsetpoint;
+
+      if (Math.abs(targetExtendsetpoint - armyBoy.getExtendEncoder()) < 1) tiltsetpoint = targetTiltsetpoint;
+    } 
+
     armyBoy.updatePID(tiltsetpoint, extendsetpoint);
 
     // else if(oi.getXboxButtonPress(2)) { // ground both unused at the moment
@@ -246,20 +241,4 @@ public class Robot extends TimedRobot {
   /** This function is called periodically when disabled. */
   @Override
   public void disabledPeriodic() {}
-
-  /** This function is called once when test mode is enabled. */
-  @Override
-  public void testInit() {}
-
-  /** This function is called periodically during test mode. */
-  @Override
-  public void testPeriodic() {}
-
-  /** This function is called once when the robot is first started up. */
-  @Override
-  public void simulationInit() {}
-
-  /** This function is called periodically whilst in simulation. */
-  @Override
-  public void simulationPeriodic() {}
 }

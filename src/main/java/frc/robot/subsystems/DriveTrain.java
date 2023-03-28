@@ -29,8 +29,6 @@ public class DriveTrain {
     //Groups the motor controller groups into one
     private final DifferentialDrive diffdrive = new DifferentialDrive(left, right);
 
-    //private SimpleMotorFeedforward simpleGoToPoint = new SimpleMotorFeedforward(.5, 0.15);
-
     //Ensures motorcontrollers are zeroed out and inverts left side
     public DriveTrain(){
         left.setInverted(true);

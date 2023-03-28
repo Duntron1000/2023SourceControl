@@ -6,8 +6,8 @@ import edu.wpi.first.wpilibj.Joystick;
 //Handles inputs
 public class OIHandler {
     //Controller objects
-    Joystick joystick = new Joystick(portMap.joystick);
-    XboxController xbox = new XboxController(portMap.xbox);
+    private final Joystick joystick = new Joystick(portMap.joystick);
+    private final XboxController xbox = new XboxController(portMap.xbox);
 
     //Gets the flighsticks's current x val
     public double getJoystickX(){

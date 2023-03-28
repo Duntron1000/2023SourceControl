@@ -11,7 +11,6 @@ import frc.robot.portMap;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-//import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 //Controls the grabber mechanism
@@ -27,7 +26,7 @@ public class grabber {
     private final DoubleSolenoid soul = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
 
     //Checks intake position
-    public boolean extended = false;
+    public boolean cubeMode = false;
 
     //Rotates intake motors
     public void intake(double speed) {
@@ -36,18 +35,18 @@ public class grabber {
     }
 
     public void toggle() {
-        if (extended) retract();
+        if (cubeMode) retract();
         else extend();
     }
 
     public void extend() {
         soul.set(Value.kForward);
-        extended = true;
+        cubeMode = true;
     }
 
     public void retract() {
         soul.set(Value.kReverse);
-        extended = false;
+        cubeMode = false;
     }
 
     public double getLeftEncoder(){

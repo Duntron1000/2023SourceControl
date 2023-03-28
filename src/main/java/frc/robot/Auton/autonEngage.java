@@ -4,7 +4,7 @@ import frc.robot.Robot;
 import frc.robot.subsystems.balanceIdea;
 
 public class autonEngage extends autonBase {
-    private balanceIdea bal = new balanceIdea();
+    private final balanceIdea bal = new balanceIdea();
     
     public autonEngage() {
         Robot.drive.resetEncoders();

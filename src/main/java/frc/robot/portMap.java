@@ -1,7 +1,6 @@
 package frc.robot;
 
 public class portMap {
-
     //drive train
     public static final int CAN_left1 = 1;
     public static final int CAN_left2 = 2;
@@ -20,21 +19,4 @@ public class portMap {
     //controllers
     public static final int joystick = 0;
     public static final int xbox = 1;
-
-    //Tilt PID Values -- not yet accualy used
-    public static final double TILT_P = 0.1;
-    public static final double TILT_I = 0;
-    public static final double TILT_D = 0;
-    public static final double TILT_Iz = 0;
-    public static final double TILT_FF = 0;
-
-    //Extend PID Values -- not yet accualy used
-    public static final double EXTEND_P = 0.1;
-    public static final double EXTEND_I = 0;
-    public static final double EXTEND_D = 0;
-    public static final double EXTEND_Iz = 0;
-    public static final double EXTEND_FF = 0;
-
-
-
 }
