@@ -1,24 +1,20 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import frc.robot.Robot;
 
 public class balanceIdea {
     private final AHRS navX = new AHRS();;
 
     private double driveTrainSetPoint;
-    private final double driveTrainGain = -.5;
+    private static final double driveTrainGain = -.6;
 
-    private final PIDController pid1 = new PIDController(.1, 0, 0);
+    private static final PIDController pid1 = new PIDController(.075, 0, 0);
 
     public void balance(DriveTrain d){ 
-        driveTrainSetPoint = driveTrainGain*pid1.calculate(deadZone(navX.getPitch(), 2), 0);
+        driveTrainSetPoint = driveTrainGain*pid1.calculate(deadZone(navX.getPitch(), 2.5), 0);
 
         SmartDashboard.putNumber("DTSP", driveTrainSetPoint);
 
@@ -27,12 +23,15 @@ public class balanceIdea {
     }
 
     private double deadZone(double pitch, double limit){
-        if(Math.abs(pitch) < limit){
+        if(Math.abs(pitch) < limit || Math.abs(pitch) > 20){
             return 0;
         }else{
             return pitch;
         }
     }
 
-
+    public static void speedFromAngle(){
+        double angle = SmartDashboard.getNumber("Test Angle:", 0);
+        SmartDashboard.putNumber("Resulting speed:", driveTrainGain*pid1.calculate(angle, 0));
+    }
 }

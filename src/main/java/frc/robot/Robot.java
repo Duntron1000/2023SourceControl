@@ -29,7 +29,7 @@ public class Robot extends TimedRobot {
   
   //private balance ballet = new balance(); //see balance class
   private final AHRS gyro = new AHRS();
-  private final grabber grab = new grabber();
+  public static final grabber grab = new grabber();
   public static final arm armyBoy = new arm();
 
   //Important variables
@@ -82,6 +82,8 @@ public class Robot extends TimedRobot {
 
     //Robot's current pitch
     SmartDashboard.putNumber("Gyro: ", (gyro.getPitch()));
+
+    balanceIdea.speedFromAngle();
   }
 
   /*
@@ -101,6 +103,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Auto choices", m_chooser);
 
     smartdashboards();
+
+    SmartDashboard.putNumber("Test Angle:", 0);
 
     CameraServer.startAutomaticCapture();
   }
@@ -221,7 +225,7 @@ public class Robot extends TimedRobot {
     //Controls intake
     if (oi.getXboxButtonPress(6) && oi.getXboxButtonPress(7)) intakeSpeed = .2;
     else if (oi.getXboxButtonPress(6)) intakeSpeed = .6;
-    else if (oi.getXboxButtonPress(5)) intakeSpeed = -.15;
+    else if (oi.getXboxButtonPress(5)) intakeSpeed = -.2;
     else intakeSpeed = 0;;
 
     grab.intake(intakeSpeed);
