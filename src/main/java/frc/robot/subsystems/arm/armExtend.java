@@ -23,7 +23,7 @@ public class armExtend {
         m_encoder.setPosition(0);
 
         //PID values -- to be removed
-        kP = 0.12; 
+        kP = 0.15; 
         kI = 0;
         kD = 0; 
         kIz = 0; 

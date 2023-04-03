@@ -6,15 +6,15 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class balanceIdea {
-    private final AHRS navX = new AHRS();;
+    private final AHRS navX = new AHRS();
 
     private double driveTrainSetPoint;
-    private static final double driveTrainGain = -.6;
+    private static final double driveTrainGain = -.5;
 
-    private static final PIDController pid1 = new PIDController(.075, 0, 0);
+    private static final PIDController pid1 = new PIDController(.046, 0, 0);
 
     public void balance(DriveTrain d){ 
-        driveTrainSetPoint = driveTrainGain*pid1.calculate(deadZone(navX.getPitch(), 2.5), 0);
+        driveTrainSetPoint = driveTrainGain*pid1.calculate(deadZone(navX.getPitch(), 3.25), 0);
 
         SmartDashboard.putNumber("DTSP", driveTrainSetPoint);
 

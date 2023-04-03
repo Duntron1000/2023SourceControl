@@ -6,15 +6,18 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.Auton.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.arm.arm;
 
+//import javax.print.attribute.standard.Compression;
+
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.cameraserver.CameraServer; 
+
+
 /*
 The VM is configured to automatically run this class, and to call the functions corresponding to
 each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -26,6 +29,7 @@ public class Robot extends TimedRobot {
   //Objects
   public static final DriveTrain drive = new DriveTrain();
   private final OIHandler oi = new OIHandler();
+  //private final Compressor comp = new Compressor(PneumaticsModuleType.CTREPCM);
   
   //private balance ballet = new balance(); //see balance class
   private final AHRS gyro = new AHRS();
@@ -47,7 +51,10 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto1 = "communityExit";
   private static final String kCustomAuto2 = "oneCone";
   private static final String kCustomAuto3 = "oneCubeExit";
-  private static final String kCustomAuto4 = "engage";
+  private static final String kCustomAuto4 = "oneCubeMid";
+  private static final String kCustomAuto5 = "oneCubeMidExit";
+  private static final String kCustomAuto6 = "engage";
+  private static final String kCustomAuto7 = "engageOneCube";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   autonBase autoBoyo;
@@ -99,7 +106,10 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("Exit Community", kCustomAuto1);
     m_chooser.addOption("One Cone", kCustomAuto2);
     m_chooser.addOption("One Cone Exit", kCustomAuto3);
-    m_chooser.addOption("Engage", kCustomAuto4);
+    m_chooser.addOption("One Cone Mid", kCustomAuto4);
+    m_chooser.addOption("One Cone Mid Exit", kCustomAuto5);
+    m_chooser.addOption("Engage", kCustomAuto6);
+    m_chooser.addOption("Engage One Cone", kCustomAuto7);
     SmartDashboard.putData("Auto choices", m_chooser);
 
     smartdashboards();
@@ -140,7 +150,10 @@ public class Robot extends TimedRobot {
     if (m_autoSelected.equals(kCustomAuto1))autoBoyo = new autonBase();
     else if (m_autoSelected.equals(kCustomAuto2)) autoBoyo = new autonOneCone();
     else if (m_autoSelected.equals(kCustomAuto3)) autoBoyo = new autonOneConeExit();
-    else if (m_autoSelected.equals(kCustomAuto4)) autoBoyo = new autonEngage();
+    else if (m_autoSelected.equals(kCustomAuto4)) autoBoyo = new autonOneConeMid();
+    else if (m_autoSelected.equals(kCustomAuto5)) autoBoyo = new autonOneConeMidExit();
+    else if (m_autoSelected.equals(kCustomAuto6)) autoBoyo = new autonEngage();
+    else if (m_autoSelected.equals(kCustomAuto7)) autoBoyo = new autonEngageOneCone();
 
   }
 
@@ -161,6 +174,12 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+  /* 
+    if(comp.getPressure() < 90){
+    comp.enableDigital();
+    }
+    */
+
     //Drives using flighstick values
     drive.drive(oi.getJoystickX(), -oi.getJoystickY());
 
@@ -197,7 +216,7 @@ public class Robot extends TimedRobot {
     //   //tiltsetpoint = 6;
     // }
     else if(oi.getXboxButtonPress(2)) { // human player
-      targetTiltsetpoint = -72.4;
+      targetTiltsetpoint = -73;
       targetExtendsetpoint = -1;
     }
 

@@ -18,6 +18,8 @@ public class DriveTrain {
     private final CANSparkMax right1 = new CANSparkMax(portMap.CAN_right1, MotorType.kBrushless);
     private final CANSparkMax right2 = new CANSparkMax(portMap.CAN_right2, MotorType.kBrushless);
 
+    //compressor
+
     //encoders
     private final RelativeEncoder leftEncoder;
 	private final RelativeEncoder rightEncoder;
