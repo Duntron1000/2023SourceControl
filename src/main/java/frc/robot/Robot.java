@@ -188,8 +188,8 @@ public class Robot extends TimedRobot {
     else if (oi.getPOV() == 180) targetTiltsetpoint += .3;
 
     //Extends arm in & out manually
-    if (oi.getPOV() == 90) targetExtendsetpoint += 0.6;
-    else if (oi.getPOV() == 270) targetExtendsetpoint -= 0.6;
+    if (oi.getPOV() == 90) targetExtendsetpoint += 0.8;
+    else if (oi.getPOV() == 270) targetExtendsetpoint -= 0.8;
 
     //Arm pid locations - must find all of the pid values
     if (oi.getXboxButtonPress(1) && inSteak.equals("Cube")) { // cube low
